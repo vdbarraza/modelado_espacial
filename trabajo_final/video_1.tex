@@ -1,0 +1,280 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  ignorenonframetext,
+]{beamer}
+\usepackage{pgfpages}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{: }
+\setbeamercolor{caption name}{fg=normal text.fg}
+\beamertemplatenavigationsymbolsempty
+% Prevent slide breaks in the middle of a paragraph
+\widowpenalties 1 10000
+\raggedbottom
+\setbeamertemplate{part page}{
+  \centering
+  \begin{beamercolorbox}[sep=16pt,center]{part title}
+    \usebeamerfont{part title}\insertpart\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{section page}{
+  \centering
+  \begin{beamercolorbox}[sep=12pt,center]{part title}
+    \usebeamerfont{section title}\insertsection\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{subsection page}{
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center]{part title}
+    \usebeamerfont{subsection title}\insertsubsection\par
+  \end{beamercolorbox}
+}
+\AtBeginPart{
+  \frame{\partpage}
+}
+\AtBeginSection{
+  \ifbibliography
+  \else
+    \frame{\sectionpage}
+  \fi
+}
+\AtBeginSubsection{
+  \frame{\subsectionpage}
+}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usetheme[]{CambridgeUS}
+\usecolortheme{seahorse}
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\newif\ifbibliography
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Introducción a la teledetección},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Introducción a la teledetección}
+\author{}
+\date{\vspace{-2.5em}}
+
+\begin{document}
+\frame{\titlepage}
+
+\begin{frame}{Fundamentos de la teledetección}
+\protect\hypertarget{fundamentos-de-la-teledetecciuxf3n}{}
+\textbf{Teledetección} es la técnica que permite obtener información a
+distancia de objetos sin que exista un contacto material. Para que ello
+sea posible es necesario que, aunque sin contacto material, exista algún
+tipo de interacción entre los objetos observados; situados sobre e la
+superficie terrestre, marina o en la atmósfera; y un sensor situado en
+una plataforma (satélite, avión, etc.).
+
+En el caso la teledetección la interacción que se produce va a ser un
+flujo de radiación que parte de los objetos y se dirige hacia el sensor.
+
+\textbf{El sensoramiento remoto o teledetección es la práctica
+científico-tecnológica que permite adquirir información de objetos o
+sistemas sin estar en contacto físico directo con los mismos}
+\end{frame}
+
+\begin{frame}{Fundamentos de la teledetección}
+\protect\hypertarget{fundamentos-de-la-teledetecciuxf3n-1}{}
+Este flujo puede ser, en cuanto a su origen, de tres tipos:
+
+\begin{itemize}
+\tightlist
+\item
+  Radiación solar reflejada por los objetos(luz visible e infrarrojo
+  reflejado)
+\item
+  Radiación terrestre emitida por los objetos (infrarrojo térmico)
+\item
+  Radiación emitida por el sensor y reflejada por los objetos (radar)
+\end{itemize}
+
+Las técnicas basadas en los dos primeros tipos se conocen como
+teledetección pasiva y la última como teledetección activa.
+\end{frame}
+
+\begin{frame}{Ventajas y Desventajas}
+\protect\hypertarget{ventajas-y-desventajas}{}
+\begin{block}{Ventajas}
+\protect\hypertarget{ventajas}{}
+\begin{itemize}
+\tightlist
+\item
+  Produce valores medios de una determinada área
+\item
+  Ofrece una amplia cobertura espacial y garantiza periodicidad
+\item
+  Permite el análisis temporal en la dimensión horizontal
+\end{itemize}
+\end{block}
+
+\begin{block}{Desventajas}
+\protect\hypertarget{desventajas}{}
+\begin{itemize}
+\tightlist
+\item
+  La mayoría de la E interactúa superficialmente con el objetivo
+\item
+  Dependiendo del sistema, la frecuencia de observación puede no ser
+  adecuada
+\item
+  Radiación en el visible e IR no atraviesa las nubes
+\item
+  Las mediciones pueden ser imprecisas
+\item
+  Son necesarias mediciones in situ para validar los productos
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Espectro electromagnetico}
+\protect\hypertarget{espectro-electromagnetico}{}
+La radiación (solar reflejada, terrestre o emitida por el sensor y
+reflejada) que llega de la superficie terrestre y que ha atravesado la
+atmósfera, es almacenada en formato digital. Una vez recuperados los
+datos en el centro de control del satélite, permitirán obtener
+información acerca de la superficie terrestre y de la atmósfera. El tipo
+de información que se obtiene dependerá de la longitud de onda en la que
+el sensor capte radiación.
+
+La REM de acuerdo a su longitud de onda, energía o frecuencia (se ha
+dividido arbitrariamente en intervalos o bandas)
+\end{frame}
+
+\begin{frame}{Espectro electromagnetico}
+\protect\hypertarget{espectro-electromagnetico-1}{}
+\begin{figure}
+\centering
+\includegraphics{https://concepto.de/wp-content/uploads/2019/05/espectro-electromagnetico-e1559140544472.jpg}
+\caption{Espectro electromagnetico}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Firma espectral o patrón espectral}
+\protect\hypertarget{firma-espectral-o-patruxf3n-espectral}{}
+Es la forma peculiar de reflejar o emitir energía de un determinado
+objeto o cubierta.
+
+Depende de las características físicas o químicas del objeto que
+interaccionan con la energía electromagnética, y varía según las
+longitudes de onda.
+
+\begin{figure}
+\centering
+\includegraphics{https://images.squarespace-cdn.com/content/v1/521e95f4e4b01c5870ce81cf/1525455335128-7L6D5QJ4VJCH8V1ECQIA/FirmaEspectral.JPG}
+\caption{Firma espectral}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Tipos de resoluciones}
+\protect\hypertarget{tipos-de-resoluciones}{}
+\begin{itemize}
+\item
+  ESPECTRAL: Se refiere al número de bandas y a la anchura espectral de
+  las bandas
+\item
+  ESPACIA: Es la medida del objeto mas pequeño que puede ser distinguido
+  sobre una imagen
+\item
+  TEMPORAL: Se refiere a cada cuanto tiempo recoge el sensor una imagen
+  de un área en particular
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Indices de vegetación}
+\protect\hypertarget{indices-de-vegetaciuxf3n}{}
+\begin{block}{NDVI}
+\protect\hypertarget{ndvi}{}
+\begin{figure}
+\centering
+\includegraphics{https://www.researchgate.net/publication/261712211/figure/fig2/AS:392467435278346@1470582936969/Figura-2-Curva-anual-del-indice-espectral-de-vegetacion-NDVI-o-EVI-y-sus-descriptores.png}
+\caption{NDVI}
+\end{figure}
+
+El más conocido es el Indice Normalizado de Vegetación (NDVI) :
+
+\begin{itemize}
+\item
+  El NDVI es un índice cuantitativo de verdor que va desde -1 a 1, donde
+  -1 representa un verdor mínimo o inexistente y 1 representa el verdor
+  máximo.
+\item
+  Este índice se utiliza a menudo para una medida aproximada de salud,
+  cobertura y fenología de la vegetación (etapa del ciclo de vida) en
+  grandes extensiones territoriales.
+\item
+  También es habitual su uso en agricultura de precisión para estimar la
+  salud de las plantaciones en determinadas parcelas
+\item
+  El cálculo del NDVI se realiza a partir del canal visible y el NIR
+  reflejado por la vegetación, cuya ecuación es:
+\end{itemize}
+
+\[ NDVI= (NIR- RED) /(NIR +RED)\]
+
+\begin{itemize}
+\item
+  La vegetación saludable (izquierda de la imagen) absorbe la mayor
+  parte de la luz visible, y refleja una gran cantidad de energía de
+  infrarrojo cercano.
+\item
+  La vegetación poco saludable o escasa (derecha de la imagen) refleja
+  una luz más visible y una luz menos infrarroja
+\end{itemize}
+\end{block}
+\end{frame}
+
+\end{document}

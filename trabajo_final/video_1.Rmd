@@ -1,0 +1,134 @@
+---
+title: "Introducción a la teledetección"
+output:
+  slidy_presentation: default
+  beamer_presentation:
+    theme: CambridgeUS
+    colortheme: seahorse
+---
+
+
+# Fundamentos de la teledetección
+
+**Teledetección** es la técnica que permite obtener información a distancia de objetos sin que exista un contacto material. Para que ello sea posible es necesario que, aunque sin contacto material, exista algún tipo de interacción entre los objetos observados; situados sobre e la superficie terrestre, marina o en la atmósfera; y un sensor situado en una plataforma (satélite, avión, etc.).
+
+En el caso la teledetección la interacción que se produce va a ser un flujo de radiación que parte de los objetos y se dirige hacia el sensor.
+
+**El sensoramiento remoto o teledetección es la práctica científico-tecnológica que permite adquirir información de objetos o sistemas sin estar en contacto físico directo con los mismos**
+
+# Fundamentos de la teledetección
+
+Este flujo puede ser, en cuanto a su origen, de tres tipos:
+
+- Radiación solar reflejada por los objetos(luz visible e infrarrojo reflejado)
+
+- Radiación terrestre emitida por los objetos (infrarrojo térmico)
+
+- Radiación emitida por el sensor y reflejada por los objetos (radar)
+
+Las técnicas basadas en los dos primeros tipos se conocen como teledetección pasiva y la última como teledetección activa.
+
+
+# Ventajas y Desventajas
+
+### Ventajas
+
+- Produce valores medios de una determinada área
+-  Ofrece una amplia cobertura espacial y garantiza periodicidad 
+-  Permite el análisis temporal en la dimensión horizontal 
+
+### Desventajas
+
+- La mayoría de la E interactúa superficialmente con el objetivo
+- Dependiendo del sistema, la frecuencia de observación puede no ser adecuada
+- Radiación en el visible e IR no atraviesa las nubes
+- Las mediciones pueden ser imprecisas 
+- Son necesarias mediciones in situ para validar los productos 
+
+# Espectro electromagnetico
+
+La radiación (solar reflejada, terrestre o emitida por el sensor y reflejada) que llega de la superficie terrestre y que ha atravesado la atmósfera, es almacenada en formato digital. Una vez recuperados los datos en el centro de control del satélite, permitirán obtener información acerca de la superficie terrestre y de la atmósfera. El tipo de información que se obtiene dependerá de la longitud de onda en la que el sensor capte radiación.
+
+La REM de acuerdo a su longitud de onda, energía o frecuencia (se ha dividido arbitrariamente en intervalos o bandas).
+
+Cada material de la superficie terrestre (vegetación, rocas, minerales, fauna, etc.), al estar compuesto por moléculas diversas y tener así estructuras distintas, tendrá características electromagnéticas diferentes, y pueden ser definidas, teóricamente, si podemos medir esas diferencias (Soria y Matar, 2016). Los electrones ocupan órbitas o capas discretas rodeando al núcleo, en una cantidad para cada átomo que está determinada por la carga eléctrica del núcleo, que a su vez se debe a la cantidad de protones que contenga ese núcleo. Cuando un electrón va de una órbita externa a una órbita interior emite un fotón. La longitud de onda de este fotón está determinada por las órbitas particulares entre las que el electrón efectúa la transición. De esta forma, un espectro , que registra las longitudes de onda de los fotones, revela qué elementos químicos conforman el objeto que se ha captado.
+ 
+ ![Espectro electromagnetico](https://static.uvq.edu.ar/mdm/teledeteccion/files/12.jpg)
+
+# Interacciones de la radiación electromagnética
+
+Todos los objetos, con independencia de la radiación que emitan, recibirán radiación emitida por otros cuerpos, principalmente del Sol. En relación con el objeto sobre el que es emitida, esta radiación puede:
+
+- reflejarse (la radiación es reenviada al espacio);
+- absorberse (la radiación incrementa la energía del objeto);
+- transmitirse (la radiación se transmite hacia abajo a otros objetos).
+
+ ![Interacciones de la radiación electromagnética con la material](https://static.uvq.edu.ar/mdm/teledeteccion/files/20.jpg)
+ 
+# Firma espectral o patrón espectral 
+
+
+ Es la forma peculiar de reflejar o emitir energía de un determinado objeto o cubierta. 
+
+ Depende de las características físicas o químicas del objeto que interaccionan con la energía electromagnética, y varía según las longitudes de onda. 
+
+ ![Firma espectral](https://images.squarespace-cdn.com/content/v1/521e95f4e4b01c5870ce81cf/1525455335128-7L6D5QJ4VJCH8V1ECQIA/FirmaEspectral.JPG)
+
+
+# Tipos de resoluciones
+
+- ESPECTRAL: Se refiere al número de bandas y a la anchura espectral de
+las bandas
+
+- ESPACIA: Es la medida del objeto mas pequeño que puede ser distinguido sobre una imagen 
+
+- TEMPORAL: Se refiere a cada cuanto tiempo recoge el sensor una imagen de un área en particular 
+
+
+# Indices de vegetación
+
+- Los Índices de Vegetación son combinaciones de las bandas espectrales,  cuya función es realzar la cubierta vegetal en función de su respuesta espectral y atenuar los detalles de otros componentes como el suelo, la iluminación, etc.
+
+- Cada Índice de Vegetación tiene sus limitaciones. El NDVI es sensible a los efectos del suelo y la atmósfera es, por ello, que se recomienda aplicar índices adicionales para un análisis más preciso de la vegetación.
+
+
+## NDVI
+
+El más conocido es el Indice Normalizado de Vegetación (NDVI) :
+
+- El NDVI es un índice cuantitativo de verdor que va desde -1 a 1, donde -1 representa un verdor mínimo o inexistente y 1 representa el verdor máximo.
+
+- Este índice se utiliza a menudo para una medida aproximada de salud, cobertura y fenología de la vegetación (etapa del ciclo de vida) en grandes extensiones territoriales.
+
+- También es habitual su uso en agricultura de precisión para estimar la salud de las plantaciones en determinadas parcelas
+
+- El cálculo del NDVI se realiza a partir del canal visible y el NIR reflejado por la vegetación, cuya ecuación es:
+
+$$ NDVI= (NIR- RED) /(NIR +RED)$$
+
+
+### ¿ Cómo interpretamos los resultados?
+
+
+- La vegetación saludable (izquierda de la imagen) absorbe la mayor parte de la luz visible, y refleja una gran cantidad de energía de infrarrojo cercano.
+
+- La vegetación poco saludable o escasa (derecha de la imagen) refleja una luz más visible y una luz menos infrarroja
+
+- Los valores negativos corresponden a áreas con superficies de agua, estructuras artificiales, rocas, nubes, nieve; el suelo desnudo generalmente cae dentro del rango de 0.1 a 0.2; y las plantas siempre tendrán valores positivos entre 0.2 y 1. 
+
+- El dosel de vegetación sano y denso debería estar por encima de 0.5, y la vegetación dispersa probablemente caerá dentro de 0.2 a 0.5. Sin embargo, es solo una regla general y siempre debe tener en cuenta la temporada, el tipo de planta y las peculiaridades regionales para saber exactamente qué significan los valores de NDVI.
+
+ ![NDVI](https://www.cursosteledeteccion.com/wp-content/uploads/2019/10/ndvi_que_es1.png)
+
+
+## EVI (Índice de Vegetación Mejorado)
+
+- El Enhanced vegetation index (EVI) o Índice de Vegetación Mejorado intenta expresar los efectos atmosféricos calculando la diferencia de radiancia entre las bandas del Azul y Rojo y nos permite monitorizar el estado de la vegetación en caso de altas densidades de biomasa.
+
+- El proceso resulta ser similar al cálculo del NDVI salvo que, en esta ocasión requerimos, además, la banda correspondiente al Azul del espectro visible. La fórmula de cálculo es la siguiente:
+
+$$ $$
+
+
+
+
