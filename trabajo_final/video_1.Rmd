@@ -1,5 +1,7 @@
 ---
-title: "Introducción a la teledetección"
+title: "Introducción a la teledetección: "
+subtitle: 'Fundamentos de teledetección'
+author: 'Verónica Barraza'
 output:
   slidy_presentation: default
   beamer_presentation:
@@ -129,6 +131,9 @@ $$ NDVI= (NIR- RED) /(NIR +RED)$$
 
 $$ $$
 
+## Satelites ópticos
+
+#### LANDSAT
 
 
 
