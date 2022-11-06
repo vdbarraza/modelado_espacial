@@ -67,8 +67,21 @@ Todos los objetos, con independencia de la radiación que emitan, recibirán rad
 
  ![Interacciones de la radiación electromagnética con la material](https://static.uvq.edu.ar/mdm/teledeteccion/files/20.jpg)
  
-# Firma espectral o patrón espectral 
+ 
+# Radiancia y Reflectancia
 
+Los datos que vienen almacenados en una imagen Landsat (o cualquier otra imagen obtenida mediante un sensor óptico), son valores o niveles digitales (ND). Dichos niveles digitales no representan de manera directa ninguna variable biofísica y, por tanto, no es conveniente que usted obtenga ningún índice espectral usando dichos valores "crudos". La razón para no hacerlo es muy simple: los llamados "índices espectrales" fueron desarrollados para trabajar con valores de reflectancia espectral de la superficie terrestre. Los niveles digitales no proporcionan dicha información. Por lo tanto, hay que convertir dichos valores ND en valores de reflectancia. 
+
+Este proceso se realiza en dos etapas:
+
+1- Conversión de ND a Radiancia (esta etapa se conoce como calibración radiométrica)
+
+2- Conversión de Radiancia a Reflectancia Aparente (es decir, el cálculo de la reflectancia en el sensor)
+
+Si, adicionalmente, se remueven los efectos atmosféricos, es posible convertir la reflectancia en el sensor en reflectancia en la superficie.  En tal caso, se habrá realizado un proceso completo de corrección atmosférica.
+
+
+# Firma espectral o patrón espectral 
 
  Es la forma peculiar de reflejar o emitir energía de un determinado objeto o cubierta. 
 
@@ -135,5 +148,25 @@ $$ $$
 
 #### LANDSAT
 
+LANDSAT (LAND=tierra y SAT=satélite) fue el primer satélite enviado por los Estados Unidos para el monitoreo de los recursos terrestres. Inicialmente se le llamó ERTS-1 (Earth Resources Tecnology Satellite) y posteriormente los restantes recibieron el nombre de LANDSAT.
 
+**Características de las imágenes Landsat**
 
+La misión Landsat ofrece diferentes imágenes satélite acotadas a momentos temporales y bajo resoluciones de pixel diferente. Desde la misión Landsat 1, hasta la actual Landsat 8, existe un repertorio histórico de lo más variado. En función de la franja temporal de análisis, dispones de las siguientes misiones Landsat:
+
+- Landsat 1: Julio 1972-Enero 1978
+- Landsat 2: Enero 1975-Febrero 1982
+- Landsat 3: Marzo 1978-Marzo 1983
+- Landsat 4: Julio 1982-Diciembre 1993
+- Landsat 5: Enero 1984-Enero 2013
+- Landsat 7: Enero 1999-Actualidad
+- Landsat 8: Abril 2013-Actualidad
+- Landsat 9: septiembre de 2021- Actualidad
+
+Las misiones Landsat 7 y Landsat 8 son las actualmente vigentes para la descarga diaria de imágenes. La adquisición de sus imágenes, o resolución temporal, es de 16 días. Por tanto, dispondrás de una nueva imagen satélite actualizada para la misma zona de trabajo cada dos semanas aproximadamente.
+
+**Características de bandas**
+
+Las imágenes de Landsat 8 están formadas por 10 bandas de trabajo + 1 banda pancromática cuyas resoluciones se encuentran en 15, 30 y 100 metros. Aunque su máxima resolución se encuentra en 30 metros, la banda pancromática permite equiparar todas las bandas a una resolución de 15 metros a través de la técnica pansharpening, una particular forma de remuestrear sus bandas a un tamaño homogéneo de 15 metros más pequeños. En caso de no emplear esta técnica de refinado pancromático, el juego de bandas te obligará a trabajar con resoluciones de 30 metros para todas sus bandas y 100 metros para las bandas térmicas (TIR)
+
+![Bandas](http://www.gisandbeers.com/wp-content/uploads/2020/02/Bandas-Landsat-8.jpg)

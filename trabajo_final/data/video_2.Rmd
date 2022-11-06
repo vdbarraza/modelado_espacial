@@ -11,13 +11,21 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Introducción al análsis de imagenes satelitales
 
-Este video exploraremos cómo importar y graficar un ráster multibanda en R. Usaremos un subset de una escena de Landsat 9 producto de surferce reflectance, perteneciente al bosque Chaqueño. 
+Este video exploraremos cómo importar y graficar un ráster multibanda en R. Usaremos un subset de una escena de Landsat 9 producto de surferce reflectance, perteneciente al bosque Chaqueño. Primero aprenderemos a leer un raster, y visualizarrlo. Finalmente, calcularemos distintos indices de vegetación.
 
-Primero aprenderemos a leer un raster, y visualizarrlo. Finalmente, calcularemos distintos indices de vegetación.
+En este notebook vamos a utilizar el producto de reflectancia de superficie de Landsat 9. El último satélite de la NASA fue lanzado el 27 de septiembre de 2021 a bordo de Atlas V y sus imágenes están disponibles desde el 10 de febrero de 2022. Como sus sucesores, cuenta con el instrumento OLI (Operational Land Imager 2) y TIRS (Thermal Infrared Sensor 2). En este caso, OLI 2 y TIRS 2 introducen la mejora en los datos provenientes de masas de agua, humedad del suelo y vegetación.
+
+La flota Landsat 9 continua la sistemática de bandas de las anteriores misiones. Seis bandas para el instrumento OLI 2 basadas en el visible, NIR y SWIR junto a la banda pancromática y las bandas de cirros y aerosol. Dos bandas térmicas para el TIRS 2. En este caso la resolución radiométrica pasa de 12 a 14 bits frente a los datos de Landsat 8.
 
 A continuación, te mostramos una comparativa de las bandas de ambos satélites (Landsat 9):
 
 ![Bandas](https://blogpnt.files.wordpress.com/2021/09/landsat9_bandas-2.png)
+
+
+Sus resoluciones se mantienen a 30 metros en el visible, el NIR y el SWIR pudiendo trabajar la banda pancromática para un refinado que permita la mejora de la imagen hasta 15 metros de resolución (frente a los actuales 10 metros de Sentinel 2 en el visible)
+
+El periodo de revisita de las imágenes es de aproximadamente 8 días generando tiles de aproximadamente 170 km por 183 km determinados de manera constante a través de los convencionales parámetros de Path y Row. Si necesitas conocer exactamente los momentos futuros o pasados de mapeo para Landsat 9, puedes recurrir a la herramienta online Landsat Acquisition Tool que te permitirá visualizar los mapeos temporales en un momento determinado para la flota del nuevo satélite.
+
 
 ## Librerias a utilizar
 
@@ -31,6 +39,8 @@ library(ggplot2)
 # load raster in an R object
 setwd("/Users/veronica/Documents/Maestria/modelado_espacial/modelado_espacial/trabajo_final/data")
 ```
+
+Ahora realicemos un gráfico de la imágen.
 
 
 ```{r}
@@ -55,11 +65,15 @@ plot(imagen_stack,
      col=grayscale_colors)
 ```
 
+También podemos ver el métadato, para saber la resolución espacial, las dimenciones de lasa bandas, el nombre de las mismas y la proyección.
+
 ```{r}
 # view attributes: Check out dimension, CRS, resolution, values attributes, and 
 # band.
 imagen_stack
 ```
+
+Si estamos interesados en unicamente una banda, podemos importar directamente la banda de interes. 
 
 ```{r}
 # Can specify which band we want to read in
@@ -76,15 +90,24 @@ plot(banda_2,
 
 Vamos a analizar e interpretar el contenido de información de las bandas de las imágenes ópticas multiespectrales. Familiarizarnos con las diferentes opciones de combinación de bandas y la obtención de imágenes de color.
 
+Primero veamos como es la distribución de los valores de reflectancia de superficie de todas las bandas.
 
 ```{r}
 # view histogram of all 3 bands
 hist(imagen_stack,
      maxpixels=ncell(imagen_stack))
 ```
+No obtenemos tanta información de estos gráficos en escala de grises; a menudo se combinan en un "compuesto" para crear visualizaciones más interesantes. 
 
+Para hacer una imagen de “color verdadero (o natural)”, es decir, algo que parezca una fotografía normal (vegetación en verde, agua azul, etc.), necesitamos bandas en las regiones roja, verde y azul. Para esta imagen de Landsat, se pueden usar las bandas 4 (roja), 3 (verde) y 2 (azul). El método plotRGB se puede utilizar para combinarlos en un solo compuesto. 
 
-Observen que la imagen de arriba se ve oscura. A continuación, utilizaremos el argumento de estiramiento (strech) integrado en la función plot_rgb (). El argumento str_clip le permite especificar la cantidad de partes de la distribución de datos se desea recortar. Cuanto mayor sea el número, más se estirarán o se aclararán los datos.
+```{r}
+#landsatRGB <- stack(b4, b3, b2)
+plotRGB(imagen_stack, 
+        r = 'SR_B4', g = 'SR_B3', b = 'SR_B2',axes = TRUE,  main = "Landsat Composite")
+```
+
+Observen que la imagen de arriba se ve oscura. También puede proporcionar argumentos adicionales a plotRGB para mejorar la visualización (por ejemplo, una extensión lineal de los valores, usando strecth = "lin").
 
 ```{r}
 #landsatRGB <- stack(b4, b3, b2)
@@ -141,7 +164,10 @@ Donde L es la contribución del suelo y puede variar entre 0 y 1, según el porc
 
 Se utilizará la imagen con reflectancia en superficie de Landsat y vamos a cálcular varios indices. También puede usar otra más que le parezca interesante. 
 
-## NDVI
+## Índice de vegetación normalizado (NDVI)
+
+El índice de vegetación normalizado (NDVI) ayuda a diferenciar la vegetación de otros tipos de cubierta terrestre (artificial) y a determinar su estado general. También permite definir y visualizar las áreas con vegetación en el mapa, así como detectar cambios anormales en el proceso de crecimiento.
+
 
 ```{r}
 vi <- function(img, k, i) {
@@ -156,8 +182,9 @@ ndvi <- vi(imagen_stack, 5, 4)
 plot(ndvi, col=rev(terrain.colors(10)), main = "Chaco-NDVI in 2022")
 ```
 
-## EVI
+## Índice de vegetación mejorado (EVI)
 
+El Enhanced vegetation index (EVI) o Índice de Vegetación Mejorado intenta expresar los efectos atmosféricos calculando la diferencia de radiancia entre las bandas del Azul y Rojo y nos permite monitorizar el estado de la vegetación en caso de altas densidades de biomasa.
 
 ```{r}
 vi2 <- function(img, m, k, i) {
@@ -170,7 +197,7 @@ vi2 <- function(img, m, k, i) {
 
 # For Landsat 8: NIR = 5, red = 4, blue=2.
 evi <- vi2(imagen_stack, 5, 4, 2)
-plot(evi, col=rev(terrain.colors(6)), main = "Montes- EVI in 2013")
+  plot(evi, col=rev(terrain.colors(6)), main = "Chaco-EVI in 2022")
 ```
 ```{r}
 par(mfrow=c(1,2))
@@ -191,7 +218,8 @@ ggplot(indices, aes(x=evi, y=ndvi)) +
 ```
 ## Índice Diferencial de Agua Normalizado (NDWI)
 
-El NDWI se utiliza como una medida de la cantidad de agua que posee la vegetación o el nivel de saturación de humedad que posee el suelo. Para obtener este índice la combinación de bandas es la siguiente: Landsat 9 (3-6)/(3+6)
+El NDWI se utiliza como una medida de la cantidad de agua que posee la vegetación o el nivel de saturación de humedad que posee el suelo. Para obtener este índice la combinación de bandas es la siguiente: Landsat 9 (3-6)/(3+6).
+
 
 ```{r}
 wi <- function(img, j, k) {
@@ -201,6 +229,6 @@ wi <- function(img, j, k) {
   return(wi)
 }
 ndwi <- wi(imagen_stack, 3,5)
-plot(ndwi, col=rev(terrain.colors(10)), main = "NDWI")
+plot(ndwi, col=rev(terrain.colors(10)), main = "Chaco-NDWI in 2022")
 ```
 
