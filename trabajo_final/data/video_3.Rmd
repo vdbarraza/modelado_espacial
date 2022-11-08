@@ -15,8 +15,7 @@ Algunas de las aplicaciones más comunes de los índices de vegetación provenie
 
 Los sensores ópticos (MODIS sobre Aqua/Terra, OLI de Landsat, MSI en Sentinel 2 ) son en general los más utilizados y accesibles, dados los extensos antecedentes de la teledetección en esta región del espectro electromagnético y su facilidad para la interpretación visual directa. Existe un compromiso entre la resolución espacial y la resolución temporal. 
 
-Los sensores MODIS (Moderate-resolution Imaging Spectroadiometer ) a bordo de los satélites Terra y Aqua (lanzados en 1999 y 2002 respectivamente, y aún en funcionamiento) son los que logran el menor tiempo de revisita, pero su resolución espacial es considerada moderada. MODIS es un radiómetro con 36 bandas en la
-región del espectro electromagnético que va del óptico hasta el infrarrojo térmico. Dos bandas, una en el rojo y otra en el infrarrojo cercano, son sensadas a 250 metros de resolución, mientras que el resto de las bandas poseen 500 ó 1000 metros de resolución. Las características del instrumento permiten a MODIS completar una imagen de la Tierra cada uno o dos días.Sin embargo, el interés en MODIS va mucho más allá de las imágenes de reflectancias. Una gran variedad de productos  son generados por especialistas a partir de las imágenes MODIS.
+Los sensores MODIS (Moderate-resolution Imaging Spectroadiometer ) a bordo de los satélites Terra y Aqua (lanzados en 1999 y 2002 respectivamente, y aún en funcionamiento) son los que logran el menor tiempo de revisita, pero su resolución espacial es considerada moderada. MODIS es un radiómetro con 36 bandas en la región del espectro electromagnético que va del óptico hasta el infrarrojo térmico. Dos bandas, una en el rojo y otra en el infrarrojo cercano, son sensadas a 250 metros de resolución, mientras que el resto de las bandas poseen 500 ó 1000 metros de resolución. Las características del instrumento permiten a MODIS completar una imagen de la Tierra cada uno o dos días.Sin embargo, el interés en MODIS va mucho más allá de las imágenes de reflectancias. Una gran variedad de productos  son generados por especialistas a partir de las imágenes MODIS.
 
 
 ![MODIS](https://pbs.twimg.com/media/Cr2V5GJUAAAU6DX.jpg)
@@ -34,6 +33,18 @@ En este análisis utilizaremos el producto MOD13Q1 de MODIS, tiles H12V11 y H12V
 El monitoreo de los bosques nativos es sumamente importante para la conservación de la biodiversidad, la lucha contra el cambio climático, y la cuantificación de sus servicios ecosistémicos, por nombrar solamente algunas de las razones. Sin embargo, los bosques nativos del Parque Chaqueño argentino experimentan un proceso de deforestación y degradación cuyas tasas están entre las más altas del mundo. Desde la sanción de la Ley de Bosques en 2007 (Ley Nacional 26.331), diversos esfuerzos han apuntado a monitorear el estado de los bosques nativos.
 
 En este contexto, el análisis de series temporales de datos satelitales resulta de mucho interes. Para este video utilizaremos directamente las series temporales que ya han sido pre-procesadas. Las mismas formaron parte de un trabajo realizado en el marco de un proyecto de investgación que tenía el objetivo mencionado anteriormente y formaron parte de la tesis doctoral del Dr. Esteban Roitbert. 
+
+## Área de estudio: Bosque Chaqueño
+
+- Es la segunda área boscosa más extensa en Sudamérica luego del Amazonas
+
+- Cubre 65 millones de ha.
+
+- Incluye el área continua de bosque más extensa de Argentina, con sitios valiosos para la conservación.
+
+- Sectores con procesos activos de deforestación en diferente grado de desarrollo. 
+
+- Los frentes de deforestación más antiguos están localizados en el noreste de Tucumán y el oeste de la provincia del Chaco
 
 
 ## Gráfico de una serie temporal de EVI
@@ -249,16 +260,7 @@ legend("bottomleft", c("Original", "Media móvil centrada",
 grid()
 ```
 
-### Estimación del punto de quiebre
-
-
-
-
-
-
 # Combinando ambas series temporales
-
-
 
 
 ```{r}
@@ -267,5 +269,6 @@ espacial_total<- merge(espacial,espacial_nb, ,all.x=TRUE, all.y=TRUE)
 ggplot() + geom_point(data = espacial_total, aes(x = lon, y = lat, color = X2000.02.18))
 
 ```
+
 
 

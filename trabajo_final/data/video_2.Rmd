@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Introducción al análsis de imagenes satelitales
 
-Este video exploraremos cómo importar y graficar un ráster multibanda en R. Usaremos un subset de una escena de Landsat 9 producto de surferce reflectance, perteneciente al bosque Chaqueño. Primero aprenderemos a leer un raster, y visualizarrlo. Finalmente, calcularemos distintos indices de vegetación.
+Este video exploraremos cómo importar y graficar un ráster multibanda en R. Usaremos un subset de una escena de Landsat 9 producto de surferce reflectance, perteneciente al bosque Chaqueño. Primero aprenderemos a leer un raster, y visualizarlo. Finalmente, calcularemos distintos indices de vegetación.
 
 En este notebook vamos a utilizar el producto de reflectancia de superficie de Landsat 9. El último satélite de la NASA fue lanzado el 27 de septiembre de 2021 a bordo de Atlas V y sus imágenes están disponibles desde el 10 de febrero de 2022. Como sus sucesores, cuenta con el instrumento OLI (Operational Land Imager 2) y TIRS (Thermal Infrared Sensor 2). En este caso, OLI 2 y TIRS 2 introducen la mejora en los datos provenientes de masas de agua, humedad del suelo y vegetación.
 
@@ -231,4 +231,23 @@ wi <- function(img, j, k) {
 ndwi <- wi(imagen_stack, 3,5)
 plot(ndwi, col=rev(terrain.colors(10)), main = "Chaco-NDWI in 2022")
 ```
+
+# Aplicación:
+
+## Métodos de clasificación 
+
+### Clasificacion Supervisada
+
+Entre las aplicaciones más importantes de los datos obtenidos de imágenes satelitales es la generación de mapas de cobertura y uso de suelo, las cuales pueden ser obtenidos a partir de técnicas de clasificacion de imágenes.
+Las técnicas de clasificación de imagénes se basan en agrupar pixeles que poseen regiones del espectro similares y que pueden asociarse con diferentes clases de coberturas del suelo. En el caso particular de la clasificación supervisada,utiliza datos de entrenamiento que son variables predictoras medidas en cada unidad de muestreo, y asigna clases previas al muestreo. 
+
+Los algoritmos de clasificación supervisada varían en la forma en que identifican y describen las regiones en el espacio espectral.  Algunos pueden manejar clases definidas que se superponen entre sí, y otros generan límites firmes entre clases, entre los algoritmos más utilizados se encuentran : Random Forest, maxima verosimilitud, mínima distancia, paralelepipedos.
+
+Machine learning ofrece la posibilidad de una clasificación eficaz y eficiente de imágenes satelites,entre los algoritmos más conocidos se encuentran árboles de decisiones, random forest, redes neuronales. Algunas de sus ventajas:
+
+- Capacidad de manejar datos de alta dimensionalidad.
+
+- Mapear clases con características muy complejas.
+
+
 
