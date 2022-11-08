@@ -1,16 +1,31 @@
 ---
-title: "Introducción a la teledetección: "
-subtitle: 'Fundamentos de teledetección'
-author: 'Verónica Barraza'
+title: 'Trabajo práctico: '
+author: "Verónica Barraza"
+subtitle: Modelado Espacial
 output:
   slidy_presentation: default
   beamer_presentation:
-    theme: CambridgeUS
-    colortheme: seahorse
+    theme: AnnArbor
+    colortheme: dolphin
+    fonttheme: structurebold
+  ioslides_presentation: default
 ---
 
 
-# Fundamentos de la teledetección
+## Modelado Espacial
+
+**Objetivo**: 
+
+  - Fundamentos de la teledetección.
+  
+  - Aplicación: identificación de áreas deforestadas
+  
+    - Introducción al análsis de imagenes satelitáles con R
+  
+    - Introducción al análsis de series temporales satelitáles con R:
+  
+  
+## Fundamentos de la teledetección
 
 **Teledetección** es la técnica que permite obtener información a distancia de objetos sin que exista un contacto material. Para que ello sea posible es necesario que, aunque sin contacto material, exista algún tipo de interacción entre los objetos observados; situados sobre e la superficie terrestre, marina o en la atmósfera; y un sensor situado en una plataforma (satélite, avión, etc.).
 
@@ -18,7 +33,7 @@ En el caso la teledetección la interacción que se produce va a ser un flujo de
 
 **El sensoramiento remoto o teledetección es la práctica científico-tecnológica que permite adquirir información de objetos o sistemas sin estar en contacto físico directo con los mismos**
 
-# Fundamentos de la teledetección
+## Fundamentos de la teledetección
 
 Este flujo puede ser, en cuanto a su origen, de tres tipos:
 
@@ -31,33 +46,41 @@ Este flujo puede ser, en cuanto a su origen, de tres tipos:
 Las técnicas basadas en los dos primeros tipos se conocen como teledetección pasiva y la última como teledetección activa.
 
 
-# Ventajas y Desventajas
+## Ventajas y Desventajas
 
 ### Ventajas
-
 - Produce valores medios de una determinada área
 -  Ofrece una amplia cobertura espacial y garantiza periodicidad 
 -  Permite el análisis temporal en la dimensión horizontal 
 
 ### Desventajas
-
 - La mayoría de la E interactúa superficialmente con el objetivo
 - Dependiendo del sistema, la frecuencia de observación puede no ser adecuada
 - Radiación en el visible e IR no atraviesa las nubes
 - Las mediciones pueden ser imprecisas 
 - Son necesarias mediciones in situ para validar los productos 
 
-# Espectro electromagnetico
+## Espectro electromagnetico
 
-La radiación (solar reflejada, terrestre o emitida por el sensor y reflejada) que llega de la superficie terrestre y que ha atravesado la atmósfera, es almacenada en formato digital. Una vez recuperados los datos en el centro de control del satélite, permitirán obtener información acerca de la superficie terrestre y de la atmósfera. El tipo de información que se obtiene dependerá de la longitud de onda en la que el sensor capte radiación.
+La radiación (solar reflejada, terrestre o emitida por el sensor y reflejada) que llega de la superficie terrestre y que ha atravesado la atmósfera, es almacenada en formato digital. 
+
+Una vez recuperados los datos en el centro de control del satélite, permitirán obtener información acerca de la superficie terrestre y de la atmósfera. 
+
+El tipo de información que se obtiene dependerá de la longitud de onda en la que el sensor capte radiación.
+
+## Espectro electromagnetico
 
 La REM de acuerdo a su longitud de onda, energía o frecuencia (se ha dividido arbitrariamente en intervalos o bandas).
-
-Cada material de la superficie terrestre (vegetación, rocas, minerales, fauna, etc.), al estar compuesto por moléculas diversas y tener así estructuras distintas, tendrá características electromagnéticas diferentes, y pueden ser definidas, teóricamente, si podemos medir esas diferencias (Soria y Matar, 2016). Los electrones ocupan órbitas o capas discretas rodeando al núcleo, en una cantidad para cada átomo que está determinada por la carga eléctrica del núcleo, que a su vez se debe a la cantidad de protones que contenga ese núcleo. Cuando un electrón va de una órbita externa a una órbita interior emite un fotón. La longitud de onda de este fotón está determinada por las órbitas particulares entre las que el electrón efectúa la transición. De esta forma, un espectro , que registra las longitudes de onda de los fotones, revela qué elementos químicos conforman el objeto que se ha captado.
  
+ - Cada material de la superficie terrestre (vegetación, rocas, minerales, fauna, etc.), al estar compuesto por moléculas diversas y tener así estructuras distintas, tendrá características electromagnéticas diferentes, y pueden ser definidas, teóricamente, si podemos medir esas diferencias (Soria y Matar, 2016). 
+
+- Los electrones ocupan órbitas o capas discretas rodeando al núcleo, en una cantidad para cada átomo que está determinada por la carga eléctrica del núcleo, que a su vez se debe a la cantidad de protones que contenga ese núcleo. Cuando un electrón va de una órbita externa a una órbita interior emite un fotón. 
+
+- La longitud de onda de este fotón está determinada por las órbitas particulares entre las que el electrón efectúa la transición. De esta forma, un espectro , que registra las longitudes de onda de los fotones, revela qué elementos químicos conforman el objeto que se ha captado.
+
  ![Espectro electromagnetico](https://static.uvq.edu.ar/mdm/teledeteccion/files/12.jpg)
 
-# Interacciones de la radiación electromagnética
+## Interacciones de la radiación electromagnética
 
 Todos los objetos, con independencia de la radiación que emitan, recibirán radiación emitida por otros cuerpos, principalmente del Sol. En relación con el objeto sobre el que es emitida, esta radiación puede:
 
@@ -65,10 +88,11 @@ Todos los objetos, con independencia de la radiación que emitan, recibirán rad
 - absorberse (la radiación incrementa la energía del objeto);
 - transmitirse (la radiación se transmite hacia abajo a otros objetos).
 
+## Interacciones de la radiación electromagnética
  ![Interacciones de la radiación electromagnética con la material](https://static.uvq.edu.ar/mdm/teledeteccion/files/20.jpg)
  
  
-# Radiancia y Reflectancia
+## Radiancia y Reflectancia
 
 Los datos que vienen almacenados en una imagen Landsat (o cualquier otra imagen obtenida mediante un sensor óptico), son valores o niveles digitales (ND). Dichos niveles digitales no representan de manera directa ninguna variable biofísica y, por tanto, no es conveniente que usted obtenga ningún índice espectral usando dichos valores "crudos". La razón para no hacerlo es muy simple: los llamados "índices espectrales" fueron desarrollados para trabajar con valores de reflectancia espectral de la superficie terrestre. Los niveles digitales no proporcionan dicha información. Por lo tanto, hay que convertir dichos valores ND en valores de reflectancia. 
 
@@ -81,16 +105,15 @@ Este proceso se realiza en dos etapas:
 Si, adicionalmente, se remueven los efectos atmosféricos, es posible convertir la reflectancia en el sensor en reflectancia en la superficie.  En tal caso, se habrá realizado un proceso completo de corrección atmosférica.
 
 
-# Firma espectral o patrón espectral 
+## Firma espectral o patrón espectral 
 
- Es la forma peculiar de reflejar o emitir energía de un determinado objeto o cubierta. 
-
- Depende de las características físicas o químicas del objeto que interaccionan con la energía electromagnética, y varía según las longitudes de onda. 
+- Es la forma peculiar de reflejar o emitir energía de un determinado objeto o cubierta. 
+- Depende de las características físicas o químicas del objeto que interaccionan con la energía electromagnética, y varía según las longitudes de onda. 
 
  ![Firma espectral](https://images.squarespace-cdn.com/content/v1/521e95f4e4b01c5870ce81cf/1525455335128-7L6D5QJ4VJCH8V1ECQIA/FirmaEspectral.JPG)
 
 
-# Tipos de resoluciones
+## Tipos de resoluciones
 
 - ESPECTRAL: Se refiere al número de bandas y a la anchura espectral de
 las bandas
@@ -100,7 +123,7 @@ las bandas
 - TEMPORAL: Se refiere a cada cuanto tiempo recoge el sensor una imagen de un área en particular 
 
 
-# Indices de vegetación
+## Indices de vegetación
 
 - Los Índices de Vegetación son combinaciones de las bandas espectrales,  cuya función es realzar la cubierta vegetal en función de su respuesta espectral y atenuar los detalles de otros componentes como el suelo, la iluminación, etc.
 
@@ -117,12 +140,14 @@ El más conocido es el Indice Normalizado de Vegetación (NDVI) :
 
 - También es habitual su uso en agricultura de precisión para estimar la salud de las plantaciones en determinadas parcelas
 
+## NDVI
+
 - El cálculo del NDVI se realiza a partir del canal visible y el NIR reflejado por la vegetación, cuya ecuación es:
 
-$$ NDVI= (NIR- RED) /(NIR +RED)$$
+$$NDVI= (NIR- RED) /(NIR +RED)$$
 
 
-### ¿ Cómo interpretamos los resultados?
+## ¿ Cómo interpretamos los resultados?
 
 
 - La vegetación saludable (izquierda de la imagen) absorbe la mayor parte de la luz visible, y refleja una gran cantidad de energía de infrarrojo cercano.
@@ -133,6 +158,8 @@ $$ NDVI= (NIR- RED) /(NIR +RED)$$
 
 - El dosel de vegetación sano y denso debería estar por encima de 0.5, y la vegetación dispersa probablemente caerá dentro de 0.2 a 0.5. Sin embargo, es solo una regla general y siempre debe tener en cuenta la temporada, el tipo de planta y las peculiaridades regionales para saber exactamente qué significan los valores de NDVI.
 
+## NDVI
+
  ![NDVI](https://www.cursosteledeteccion.com/wp-content/uploads/2019/10/ndvi_que_es1.png)
 
 
@@ -142,15 +169,12 @@ $$ NDVI= (NIR- RED) /(NIR +RED)$$
 
 - El proceso resulta ser similar al cálculo del NDVI salvo que, en esta ocasión requerimos, además, la banda correspondiente al Azul del espectro visible. La fórmula de cálculo es la siguiente:
 
-$$ $$
 
-## Satelites ópticos
-
-#### LANDSAT
+## Satelites ópticos: LANDSAT
 
 LANDSAT (LAND=tierra y SAT=satélite) fue el primer satélite enviado por los Estados Unidos para el monitoreo de los recursos terrestres. Inicialmente se le llamó ERTS-1 (Earth Resources Tecnology Satellite) y posteriormente los restantes recibieron el nombre de LANDSAT.
 
-**Características de las imágenes Landsat**
+## Características de las imágenes Landsat
 
 La misión Landsat ofrece diferentes imágenes satélite acotadas a momentos temporales y bajo resoluciones de pixel diferente. Desde la misión Landsat 1, hasta la actual Landsat 8, existe un repertorio histórico de lo más variado. En función de la franja temporal de análisis, dispones de las siguientes misiones Landsat:
 
@@ -165,8 +189,89 @@ La misión Landsat ofrece diferentes imágenes satélite acotadas a momentos tem
 
 Las misiones Landsat 7 y Landsat 8 son las actualmente vigentes para la descarga diaria de imágenes. La adquisición de sus imágenes, o resolución temporal, es de 16 días. Por tanto, dispondrás de una nueva imagen satélite actualizada para la misma zona de trabajo cada dos semanas aproximadamente.
 
-**Características de bandas**
+## Características de bandas
 
 Las imágenes de Landsat 8 están formadas por 10 bandas de trabajo + 1 banda pancromática cuyas resoluciones se encuentran en 15, 30 y 100 metros. Aunque su máxima resolución se encuentra en 30 metros, la banda pancromática permite equiparar todas las bandas a una resolución de 15 metros a través de la técnica pansharpening, una particular forma de remuestrear sus bandas a un tamaño homogéneo de 15 metros más pequeños. En caso de no emplear esta técnica de refinado pancromático, el juego de bandas te obligará a trabajar con resoluciones de 30 metros para todas sus bandas y 100 metros para las bandas térmicas (TIR)
 
+## Características de bandas
 ![Bandas](http://www.gisandbeers.com/wp-content/uploads/2020/02/Bandas-Landsat-8.jpg)
+
+
+## Aplicación de estudio:
+
+- La teledetección es una importante fuente de información para el seguimiento de los cambios de la cubierta forestal, tanto en términos de su sustitución total (deforestación), como para la determinación del cambio de estructura, bienes y servicios de los ecosistemas forestales que dan lugar al fenómeno de degradación. 
+
+- Las observaciones satelitales brindan información coherente del cambio en la cubierta forestal de manera continua y a escala regional, lo que facilita la toma de decisiones al momento de planificar acciones en el territorio. 
+
+- Desde hace más de dos décadas, los sensores remotos brindan información para el monitoreo del cambio de uso del suelo (Landsat, MODIS, NOAHH-AVHRR, etc), habiendo en la actualidad largas series temporales que permiten mejorar las metodologías tradicionales de detección de cambios.
+
+Por este motivo, en los siguientes videos vamos a realizar una introduccion al análisis espacial y temporal de imágenes satelitáles en áreas deforestadas. 
+
+## ¿Qué es la deforestación?
+
+- La deforestación es un fenómeno de reducción de la superficie forestal. 
+
+- La **FAO define la deforestación** como la conversión de los bosques a otro tipo de uso de la tierra (independientemente si es inducido por humanos o no).
+
+- La deforestación está causada por múltiples factores, tanto naturales como humanos, y tiene consecuencias irreversibles en el medio ambiente.
+
+## ¿Qué es la deforestación?
+- La **deforestación** es un fenómeno mundial. Cada año, millones de hectáreas de bosques desaparecen para convertirse en plantaciones de palma aceitera, pastos para el ganado, cultivos de soja, etc. El último medio siglo ha supuesto el mayor coste de deforestación de la historia de la humanidad, arrasando un 15 por ciento de la superficie mundial de vegetación, equivalente al territorio de España, Portugal y Francia.
+
+- Tan solo en los últimos 13 años, la deforestación ha arrasado 43 millones de hectáreas en todo el mundo, acabando con bosques y selvas de forma masiva y causando un inmenso daño a la calidad de los suelos. Los bosques todavía cubren alrededor del 30 por ciento de las regiones del mundo, pero franjas del tamaño de Panamá se pierden indefectiblemente cada año. Son las cifras del último informe Frentes de deforestación; causas y respuestas en un mundo cambiante de WWF, que analiza 24 lugares que tienen una concentración significativa de puntos críticos de deforestación y donde grandes áreas de bosque remanente están amenazadas. 
+
+
+```{r setup, include=FALSE}
+## Clear environment
+rm(list = ls())
+knitr::opts_chunk$set(echo = FALSE)
+
+## Loading Library 
+pacman::p_load(tidyverse,readr, data.table, kableExtra, leaflet, ggpubr, gganimate, magick,ggthemes, plotly,modelsummary,scales,
+patchwork)
+
+forest <- fread('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-04-06/forest.csv')
+forest_area <- fread('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-04-06/forest_area.csv')
+```
+
+
+```{r fig.cap="Cambios en el área forestal a lo largo de 30 años", out.width="80%", fig.align="center"}
+a <- forest_area[entity== "Africa"|entity=="Asia"|entity=="Australia"|entity=="Europe"|entity=="Americas"]
+ ggplot(a) +
+    aes(x = year, y = forest_area) +
+    geom_line(size = 0.5) +
+    scale_fill_viridis_d(option = "inferno", direction = 1) +
+    labs(
+      x = "Year",
+      y = "Forest Area",
+      title = "Cambios en el área forestal a lo largo de 30 años") +
+  facet_wrap(vars(entity), scales = "free",ncol=1)+
+  geom_point()
+  
+#viz + transition_reveal(year) 
+ # +scale_y_continuous(breaks = scales::pretty_breaks(n = 2))
+```
+
+
+Ahora podemos hacer una visualización espacial, para comprender la magnitud del área deforestada a nivel global.
+
+```{r}
+
+subforest = forest %>% 
+  dplyr::filter(net_forest_conversion != 0) %>% 
+  tidyr::complete(expand(., nesting(entity, code), year), 
+                  fill = list(net_forest_conversion = NA)) %>% 
+  dplyr::mutate(net_forest_conversion_log10 = sign(net_forest_conversion)*log10(abs(net_forest_conversion)))
+plot_ly(
+  subforest,
+  type = 'choropleth',
+  locations = ~code,
+  z = ~net_forest_conversion_log10,
+  text = ~entity,
+  frame = ~year,
+  colors = "RdYlGn") %>% 
+  layout(
+    #geo = list(projection = list(type = "orthographic")),
+    showlegend = FALSE)
+
+```

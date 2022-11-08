@@ -55,8 +55,9 @@
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
 \fi
-\usetheme[]{CambridgeUS}
-\usecolortheme{seahorse}
+\usetheme[]{AnnArbor}
+\usecolortheme{dolphin}
+\usefonttheme{structurebold}
 % Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \IfFileExists{microtype.sty}{% use microtype if available
@@ -99,16 +100,37 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
-  pdftitle={Introducción a la teledetección},
+  pdftitle={Trabajo práctico:},
+  pdfauthor={Verónica Barraza},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 
-\title{Introducción a la teledetección}
-\author{}
-\date{\vspace{-2.5em}}
+\title{Trabajo práctico:}
+\subtitle{Modelado Espacial}
+\author{Verónica Barraza}
+\date{}
 
 \begin{document}
 \frame{\titlepage}
+
+\begin{frame}{Trabajo Práctico}
+\protect\hypertarget{trabajo-pruxe1ctico}{}
+\begin{block}{Modelado Espqcial}
+\protect\hypertarget{modelado-espqcial}{}
+\textbf{Objetivo}:
+
+\begin{itemize}
+\item
+  Fundamentos de la teledetección.
+\item
+  Introducción al análsis de imagenes satelitáles con R
+\item
+  Introducción al análsis de series temporales satelitáles con R
+\item
+  Clasificación de imágenes satelitales con R
+\end{itemize}
+\end{block}
+\end{frame}
 
 \begin{frame}{Fundamentos de la teledetección}
 \protect\hypertarget{fundamentos-de-la-teledetecciuxf3n}{}
@@ -132,7 +154,6 @@ sistemas sin estar en contacto físico directo con los mismos}
 Este flujo puede ser, en cuanto a su origen, de tres tipos:
 
 \begin{itemize}
-\tightlist
 \item
   Radiación solar reflejada por los objetos(luz visible e infrarrojo
   reflejado)
@@ -191,16 +212,77 @@ de información que se obtiene dependerá de la longitud de onda en la que
 el sensor capte radiación.
 
 La REM de acuerdo a su longitud de onda, energía o frecuencia (se ha
-dividido arbitrariamente en intervalos o bandas)
-\end{frame}
+dividido arbitrariamente en intervalos o bandas).
 
-\begin{frame}{Espectro electromagnetico}
-\protect\hypertarget{espectro-electromagnetico-1}{}
+Cada material de la superficie terrestre (vegetación, rocas, minerales,
+fauna, etc.), al estar compuesto por moléculas diversas y tener así
+estructuras distintas, tendrá características electromagnéticas
+diferentes, y pueden ser definidas, teóricamente, si podemos medir esas
+diferencias (Soria y Matar, 2016). Los electrones ocupan órbitas o capas
+discretas rodeando al núcleo, en una cantidad para cada átomo que está
+determinada por la carga eléctrica del núcleo, que a su vez se debe a la
+cantidad de protones que contenga ese núcleo. Cuando un electrón va de
+una órbita externa a una órbita interior emite un fotón. La longitud de
+onda de este fotón está determinada por las órbitas particulares entre
+las que el electrón efectúa la transición. De esta forma, un espectro ,
+que registra las longitudes de onda de los fotones, revela qué elementos
+químicos conforman el objeto que se ha captado.
+
 \begin{figure}
 \centering
-\includegraphics{https://concepto.de/wp-content/uploads/2019/05/espectro-electromagnetico-e1559140544472.jpg}
+\includegraphics{https://static.uvq.edu.ar/mdm/teledeteccion/files/12.jpg}
 \caption{Espectro electromagnetico}
 \end{figure}
+\end{frame}
+
+\begin{frame}{Interacciones de la radiación electromagnética}
+\protect\hypertarget{interacciones-de-la-radiaciuxf3n-electromagnuxe9tica}{}
+Todos los objetos, con independencia de la radiación que emitan,
+recibirán radiación emitida por otros cuerpos, principalmente del Sol.
+En relación con el objeto sobre el que es emitida, esta radiación puede:
+
+\begin{itemize}
+\tightlist
+\item
+  reflejarse (la radiación es reenviada al espacio);
+\item
+  absorberse (la radiación incrementa la energía del objeto);
+\item
+  transmitirse (la radiación se transmite hacia abajo a otros objetos).
+\end{itemize}
+
+\begin{figure}
+\centering
+\includegraphics{https://static.uvq.edu.ar/mdm/teledeteccion/files/20.jpg}
+\caption{Interacciones de la radiación electromagnética con la material}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Radiancia y Reflectancia}
+\protect\hypertarget{radiancia-y-reflectancia}{}
+Los datos que vienen almacenados en una imagen Landsat (o cualquier otra
+imagen obtenida mediante un sensor óptico), son valores o niveles
+digitales (ND). Dichos niveles digitales no representan de manera
+directa ninguna variable biofísica y, por tanto, no es conveniente que
+usted obtenga ningún índice espectral usando dichos valores ``crudos''.
+La razón para no hacerlo es muy simple: los llamados ``índices
+espectrales'' fueron desarrollados para trabajar con valores de
+reflectancia espectral de la superficie terrestre. Los niveles digitales
+no proporcionan dicha información. Por lo tanto, hay que convertir
+dichos valores ND en valores de reflectancia.
+
+Este proceso se realiza en dos etapas:
+
+1- Conversión de ND a Radiancia (esta etapa se conoce como calibración
+radiométrica)
+
+2- Conversión de Radiancia a Reflectancia Aparente (es decir, el cálculo
+de la reflectancia en el sensor)
+
+Si, adicionalmente, se remueven los efectos atmosféricos, es posible
+convertir la reflectancia en el sensor en reflectancia en la superficie.
+En tal caso, se habrá realizado un proceso completo de corrección
+atmosférica.
 \end{frame}
 
 \begin{frame}{Firma espectral o patrón espectral}
@@ -236,14 +318,21 @@ longitudes de onda.
 
 \begin{frame}{Indices de vegetación}
 \protect\hypertarget{indices-de-vegetaciuxf3n}{}
+\begin{itemize}
+\item
+  Los Índices de Vegetación son combinaciones de las bandas espectrales,
+  cuya función es realzar la cubierta vegetal en función de su respuesta
+  espectral y atenuar los detalles de otros componentes como el suelo,
+  la iluminación, etc.
+\item
+  Cada Índice de Vegetación tiene sus limitaciones. El NDVI es sensible
+  a los efectos del suelo y la atmósfera es, por ello, que se recomienda
+  aplicar índices adicionales para un análisis más preciso de la
+  vegetación.
+\end{itemize}
+
 \begin{block}{NDVI}
 \protect\hypertarget{ndvi}{}
-\begin{figure}
-\centering
-\includegraphics{https://www.researchgate.net/publication/261712211/figure/fig2/AS:392467435278346@1470582936969/Figura-2-Curva-anual-del-indice-espectral-de-vegetacion-NDVI-o-EVI-y-sus-descriptores.png}
-\caption{NDVI}
-\end{figure}
-
 El más conocido es el Indice Normalizado de Vegetación (NDVI) :
 
 \begin{itemize}
@@ -263,8 +352,10 @@ El más conocido es el Indice Normalizado de Vegetación (NDVI) :
   reflejado por la vegetación, cuya ecuación es:
 \end{itemize}
 
-\[ NDVI= (NIR- RED) /(NIR +RED)\]
+\[NDVI= (NIR- RED) /(NIR +RED)\]
 
+\begin{block}{¿ Cómo interpretamos los resultados?}
+\protect\hypertarget{cuxf3mo-interpretamos-los-resultados}{}
 \begin{itemize}
 \item
   La vegetación saludable (izquierda de la imagen) absorbe la mayor
@@ -273,7 +364,103 @@ El más conocido es el Indice Normalizado de Vegetación (NDVI) :
 \item
   La vegetación poco saludable o escasa (derecha de la imagen) refleja
   una luz más visible y una luz menos infrarroja
+\item
+  Los valores negativos corresponden a áreas con superficies de agua,
+  estructuras artificiales, rocas, nubes, nieve; el suelo desnudo
+  generalmente cae dentro del rango de 0.1 a 0.2; y las plantas siempre
+  tendrán valores positivos entre 0.2 y 1.
+\item
+  El dosel de vegetación sano y denso debería estar por encima de 0.5, y
+  la vegetación dispersa probablemente caerá dentro de 0.2 a 0.5. Sin
+  embargo, es solo una regla general y siempre debe tener en cuenta la
+  temporada, el tipo de planta y las peculiaridades regionales para
+  saber exactamente qué significan los valores de NDVI.
 \end{itemize}
+
+\begin{figure}
+\centering
+\includegraphics{https://www.cursosteledeteccion.com/wp-content/uploads/2019/10/ndvi_que_es1.png}
+\caption{NDVI}
+\end{figure}
+\end{block}
+\end{block}
+
+\begin{block}{EVI (Índice de Vegetación Mejorado)}
+\protect\hypertarget{evi-uxedndice-de-vegetaciuxf3n-mejorado}{}
+\begin{itemize}
+\item
+  El Enhanced vegetation index (EVI) o Índice de Vegetación Mejorado
+  intenta expresar los efectos atmosféricos calculando la diferencia de
+  radiancia entre las bandas del Azul y Rojo y nos permite monitorizar
+  el estado de la vegetación en caso de altas densidades de biomasa.
+\item
+  El proceso resulta ser similar al cálculo del NDVI salvo que, en esta
+  ocasión requerimos, además, la banda correspondiente al Azul del
+  espectro visible. La fórmula de cálculo es la siguiente:
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Satelites ópticos}
+\protect\hypertarget{satelites-uxf3pticos}{}
+\begin{block}{LANDSAT}
+\protect\hypertarget{landsat}{}
+LANDSAT (LAND=tierra y SAT=satélite) fue el primer satélite enviado por
+los Estados Unidos para el monitoreo de los recursos terrestres.
+Inicialmente se le llamó ERTS-1 (Earth Resources Tecnology Satellite) y
+posteriormente los restantes recibieron el nombre de LANDSAT.
+
+\textbf{Características de las imágenes Landsat}
+
+La misión Landsat ofrece diferentes imágenes satélite acotadas a
+momentos temporales y bajo resoluciones de pixel diferente. Desde la
+misión Landsat 1, hasta la actual Landsat 8, existe un repertorio
+histórico de lo más variado. En función de la franja temporal de
+análisis, dispones de las siguientes misiones Landsat:
+
+\begin{itemize}
+\tightlist
+\item
+  Landsat 1: Julio 1972-Enero 1978
+\item
+  Landsat 2: Enero 1975-Febrero 1982
+\item
+  Landsat 3: Marzo 1978-Marzo 1983
+\item
+  Landsat 4: Julio 1982-Diciembre 1993
+\item
+  Landsat 5: Enero 1984-Enero 2013
+\item
+  Landsat 7: Enero 1999-Actualidad
+\item
+  Landsat 8: Abril 2013-Actualidad
+\item
+  Landsat 9: septiembre de 2021- Actualidad
+\end{itemize}
+
+Las misiones Landsat 7 y Landsat 8 son las actualmente vigentes para la
+descarga diaria de imágenes. La adquisición de sus imágenes, o
+resolución temporal, es de 16 días. Por tanto, dispondrás de una nueva
+imagen satélite actualizada para la misma zona de trabajo cada dos
+semanas aproximadamente.
+
+\textbf{Características de bandas}
+
+Las imágenes de Landsat 8 están formadas por 10 bandas de trabajo + 1
+banda pancromática cuyas resoluciones se encuentran en 15, 30 y 100
+metros. Aunque su máxima resolución se encuentra en 30 metros, la banda
+pancromática permite equiparar todas las bandas a una resolución de 15
+metros a través de la técnica pansharpening, una particular forma de
+remuestrear sus bandas a un tamaño homogéneo de 15 metros más pequeños.
+En caso de no emplear esta técnica de refinado pancromático, el juego de
+bandas te obligará a trabajar con resoluciones de 30 metros para todas
+sus bandas y 100 metros para las bandas térmicas (TIR)
+
+\begin{figure}
+\centering
+\includegraphics{http://www.gisandbeers.com/wp-content/uploads/2020/02/Bandas-Landsat-8.jpg}
+\caption{Bandas}
+\end{figure}
 \end{block}
 \end{frame}
 
