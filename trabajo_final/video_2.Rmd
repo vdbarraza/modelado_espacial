@@ -1,0 +1,253 @@
+---
+title: "Introducción_teledeteccion"
+author: "veronica_barraza"
+date: "2022-11-05"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introducción al análsis de imagenes satelitales
+
+Este video exploraremos cómo importar y graficar un ráster multibanda en R. Usaremos un subset de una escena de Landsat 9 producto de surferce reflectance, perteneciente al bosque Chaqueño. Primero aprenderemos a leer un raster, y visualizarlo. Finalmente, calcularemos distintos indices de vegetación.
+
+En este notebook vamos a utilizar el producto de reflectancia de superficie de Landsat 9. El último satélite de la NASA fue lanzado el 27 de septiembre de 2021 a bordo de Atlas V y sus imágenes están disponibles desde el 10 de febrero de 2022. Como sus sucesores, cuenta con el instrumento OLI (Operational Land Imager 2) y TIRS (Thermal Infrared Sensor 2). En este caso, OLI 2 y TIRS 2 introducen la mejora en los datos provenientes de masas de agua, humedad del suelo y vegetación.
+
+La flota Landsat 9 continua la sistemática de bandas de las anteriores misiones. Seis bandas para el instrumento OLI 2 basadas en el visible, NIR y SWIR junto a la banda pancromática y las bandas de cirros y aerosol. Dos bandas térmicas para el TIRS 2. En este caso la resolución radiométrica pasa de 12 a 14 bits frente a los datos de Landsat 8.
+
+A continuación, te mostramos una comparativa de las bandas de ambos satélites (Landsat 9):
+
+![Bandas](https://blogpnt.files.wordpress.com/2021/09/landsat9_bandas-2.png)
+
+
+Sus resoluciones se mantienen a 30 metros en el visible, el NIR y el SWIR pudiendo trabajar la banda pancromática para un refinado que permita la mejora de la imagen hasta 15 metros de resolución (frente a los actuales 10 metros de Sentinel 2 en el visible)
+
+El periodo de revisita de las imágenes es de aproximadamente 8 días generando tiles de aproximadamente 170 km por 183 km determinados de manera constante a través de los convencionales parámetros de Path y Row. Si necesitas conocer exactamente los momentos futuros o pasados de mapeo para Landsat 9, puedes recurrir a la herramienta online Landsat Acquisition Tool que te permitirá visualizar los mapeos temporales en un momento determinado para la flota del nuevo satélite.
+
+
+## Librerias a utilizar
+
+```{r cars}
+# load the raster, sp, and rgdal packages
+rm(list=ls())
+library(raster)
+library(sp)
+library(rgdal)
+library(ggplot2)
+# load raster in an R object
+setwd("/Users/veronica/Documents/Maestria/modelado_espacial/modelado_espacial/trabajo_final/data")
+```
+
+Ahora realicemos un gráfico de la imágen.
+
+
+```{r}
+
+# Blue
+imagen <- raster('L9_chaco.tif')
+imagen_stack = stack("./L9_chaco.tif")
+summary(imagen)
+
+# create a grayscale color palette to use for the image.
+grayscale_colors <- gray.colors(100,            # number of different color levels 
+                                start = 0.0,    # how black (0) to go
+                                end = 1.0,      # how white (1) to go
+                                gamma = 2.2,    # correction between how a digital 
+                                # camera sees the world and how human eyes see it
+                                alpha = NULL)   #Null=colors are not transparent
+
+# Plot band 1
+
+# plot all three bands separately
+plot(imagen_stack, 
+     col=grayscale_colors)
+```
+
+También podemos ver el métadato, para saber la resolución espacial, las dimenciones de lasa bandas, el nombre de las mismas y la proyección.
+
+```{r}
+# view attributes: Check out dimension, CRS, resolution, values attributes, and 
+# band.
+imagen_stack
+```
+
+Si estamos interesados en unicamente una banda, podemos importar directamente la banda de interes. 
+
+```{r}
+# Can specify which band we want to read in
+banda_2 <- 
+  raster(paste0("L9_chaco.tif"), 
+           band = 2)
+
+# plot band 2
+plot(banda_2,
+     col=grayscale_colors, # we already created this palette & can use it again
+     axes=FALSE,
+     main="RGB Imagery- SR_B2-Green")
+```
+
+Vamos a analizar e interpretar el contenido de información de las bandas de las imágenes ópticas multiespectrales. Familiarizarnos con las diferentes opciones de combinación de bandas y la obtención de imágenes de color.
+
+Primero veamos como es la distribución de los valores de reflectancia de superficie de todas las bandas.
+
+```{r}
+# view histogram of all 3 bands
+hist(imagen_stack,
+     maxpixels=ncell(imagen_stack))
+```
+No obtenemos tanta información de estos gráficos en escala de grises; a menudo se combinan en un "compuesto" para crear visualizaciones más interesantes. 
+
+Para hacer una imagen de “color verdadero (o natural)”, es decir, algo que parezca una fotografía normal (vegetación en verde, agua azul, etc.), necesitamos bandas en las regiones roja, verde y azul. Para esta imagen de Landsat, se pueden usar las bandas 4 (roja), 3 (verde) y 2 (azul). El método plotRGB se puede utilizar para combinarlos en un solo compuesto. 
+
+```{r}
+#landsatRGB <- stack(b4, b3, b2)
+plotRGB(imagen_stack, 
+        r = 'SR_B4', g = 'SR_B3', b = 'SR_B2',axes = TRUE,  main = "Landsat Composite")
+```
+
+Observen que la imagen de arriba se ve oscura. También puede proporcionar argumentos adicionales a plotRGB para mejorar la visualización (por ejemplo, una extensión lineal de los valores, usando strecth = "lin").
+
+```{r}
+#landsatRGB <- stack(b4, b3, b2)
+plotRGB(imagen_stack, 
+        r = 'SR_B4', g = 'SR_B3', b = 'SR_B2',axes = TRUE, stretch = "lin", main = "Landsat True Color Composite")
+```
+Las tonalidades más habituales en una composición en **falso color** son:
+
+- Rojo, indica una vegetación sana y bien desarrollada.
+- Rosa, áreas vegetales menos densa o con vegetación menos desarrollada.
+- Blanco, áreas con escasa o nula vegetación.
+- Azul oscuro o negro indica la presencia de agua.
+- Marrón, vegetación arbustiva muy variable.
+- Beig-dorado, zonas de transición, prados secos asociados a matorral ralo.
+
+```{r}
+#landsatFCC <- stack(b5, b4, b3)
+plotRGB(imagen_stack, 
+        r = 'SR_B5', g = 'SR_B4', b = 'SR_B3', axes=TRUE, stretch="lin", main="Landsat False Color Composite")
+```
+## Indices de vegetación
+
+Los índices son mediciones empíricas de las propiedades de la superficie terrestre; constituyen valores adimensionales basados en medidas de radiación y calculados a partir de la combinación de bandas espectrales. 
+
+El objetivo principal de los índices es formular una medida sintética precisa sobre las variaciones espacio-temporales que ocurren en los ecosistemas a partir de las bandas espectrales de una imagen, dado que asumen una relación (empírica o teórica) con variables bio-geofísicas de la superficie. 
+
+El caso más conocido es el Índice de Vegetación de Diferencia Normalizada (NDVI, Normalized Difference Vegetation Index) (Tucker, C. J. 1979). Las bases teóricas para su desarrollo se derivan del comportamiento de la firma espectral típica de la vegetación. La energía reflejada en el visible es muy baja debido a la actividad de los pigmentos fotosintéticos que determinan una fuerte absorción en las porciones del espectro correspondientes al azul (470 nm) y al rojo (670 nm). Por el contrario, casi toda la radiación en el infrarrojo cercano se refleja (hay muy poca absorción) dependiendo del índice de área foliar (LAI), la distribución angular de las hojas y su anatomía y morfología. El contraste entre las respuestas del rojo (R) y el infrarrojo cercano (IRc) constituye una medida sensible de la cantidad de vegetación, donde la máxima diferencia entre R y IRc corresponde al estadío de mayor densidad o vigor de la vegetación, y el mínimo contraste a áreas de muy poca vegetación o vegetación en estado senescente. Este salto se denomina "red edge" o "borde rojo"
+
+El más sencillo de estos índices es simplemente el cociente entre las bandas roja e infrarroja:
+
+$ VI=  \rho IRc/ \rho R$
+
+El NDVI, mencionado anteriormente corresponde al cociente:
+
+
+$ NDVI = (\rho nir -\rho red) / \rho nir +\rho red)$
+
+Como cociente normalizado tiene ciertas ventajas. Reduce parcialmente los efectos ambientales (atmósfera) que se observan en las bandas individuales, variaciones provocadas por la topografía, sombras, variaciones en iluminación. Realza variaciones pequeñas en las respuestas espectrales de las coberturas. 
+Finalmente, este índice se puede determinar a partir del contaje digital crudo, radiancias, reflectancias TOA, reflectancias de superficie. Sin embargo, si bien las unidades se cancelan, y el cociente neutraliza relativamente el ruido introducido por la atmósfera, los resultados indican que es recomendable trabajar con las imágenes en reflectancia de superficie (corregidas atmosféricamente), especialmente cuando se trabaje con imágenes de más de una fecha (o con series temporales).
+
+En algunos casos puede ser interesante reemplazar la banda del rojo visible por la del verde visible, donde entrarían en juego otros pigmentos y la cual es sensible al estrés en las plantas.
+
+El NDVI describe adecuadamente el comportamiento de la vegetación en ambientes donde la cobertura vegetal es alta o por lo menos hay baja proporción de suelo desnudo. En casos donde la cobertura de la vegetación es muy pobre una buena parte de la reflectancia registrada por los sensores corresponde a la contribución del suelo y el NDVI no tiene un comportamiento eficiente frente a estas situaciones (Price, J. C. 1987). El Índice verde corregido por suelo (SAVI, Soil Adjusted Vegetation Index), da cuenta de este fenómeno (Huete, A. R. 1988):
+
+
+$ SAVI= ((\rho nir -\rho red)/(\rho nir +\rho red+L))*(1+L)$ 
+
+
+Donde L es la contribución del suelo y puede variar entre 0 y 1, según el porcentaje de suelo desnudo. Un valor de 0,5 indicaría una proporción de 50% de suelo desnudo. 
+
+
+**El objetivo en este caso es analizar la potencial información que aporta el uso de diferentes índices espectrales y evaluar la información que recuperan sobre las características biofísicas de los ambientes y su variación temporal.**
+
+
+Se utilizará la imagen con reflectancia en superficie de Landsat y vamos a cálcular varios indices. También puede usar otra más que le parezca interesante. 
+
+## Índice de vegetación normalizado (NDVI)
+
+El índice de vegetación normalizado (NDVI) ayuda a diferenciar la vegetación de otros tipos de cubierta terrestre (artificial) y a determinar su estado general. También permite definir y visualizar las áreas con vegetación en el mapa, así como detectar cambios anormales en el proceso de crecimiento.
+
+
+```{r}
+vi <- function(img, k, i) {
+  bk <- img[[k]]
+  bi <- img[[i]]
+  vi <- (bk - bi) / (bk + bi)
+  return(vi)
+}
+
+
+ndvi <- vi(imagen_stack, 5, 4)
+plot(ndvi, col=rev(terrain.colors(10)), main = "Chaco-NDVI in 2022")
+```
+
+## Índice de vegetación mejorado (EVI)
+
+El Enhanced vegetation index (EVI) o Índice de Vegetación Mejorado intenta expresar los efectos atmosféricos calculando la diferencia de radiancia entre las bandas del Azul y Rojo y nos permite monitorizar el estado de la vegetación en caso de altas densidades de biomasa.
+
+```{r}
+vi2 <- function(img, m, k, i) {
+  bm <- img[[m]]
+  bk <- img[[k]]
+  bi <- img[[i]]
+  vi2 <- 2.5 * ((bm - bk) / (bm + 6* bk - 7.5* bi + 1))
+  return(vi2)
+}
+
+# For Landsat 8: NIR = 5, red = 4, blue=2.
+evi <- vi2(imagen_stack, 5, 4, 2)
+  plot(evi, col=rev(terrain.colors(6)), main = "Chaco-EVI in 2022")
+```
+```{r}
+par(mfrow=c(1,2))
+hist(ndvi, main="NDVI")
+hist(evi, main="EVI")
+```
+```{r}
+# correlation plot between indices
+
+indices_ndvi<- as.data.frame(ndvi, xy=TRUE, na.rm=TRUE) # convertir a data frame
+indices_evi<- as.data.frame(evi, xy=TRUE, na.rm=TRUE) # convertir a data frame
+indices <- merge(indices_ndvi,indices_evi,by=c("x","y"))
+names(indices) <- c('x','y',"ndvi", "evi")
+ggplot(indices, aes(x=evi, y=ndvi)) + 
+  geom_point()+
+  geom_smooth(method=lm)
+#plot(indices_ndvi$layer,indices_evi$layer)
+```
+## Índice Diferencial de Agua Normalizado (NDWI)
+
+El NDWI se utiliza como una medida de la cantidad de agua que posee la vegetación o el nivel de saturación de humedad que posee el suelo. Para obtener este índice la combinación de bandas es la siguiente: Landsat 9 (3-6)/(3+6).
+
+
+```{r}
+wi <- function(img, j, k) {
+  bj <- img[[j]]
+  bk <- img[[k]]
+  wi <-  (bj - bk) / (bj +bk)
+  return(wi)
+}
+ndwi <- wi(imagen_stack, 3,5)
+plot(ndwi, col=rev(terrain.colors(10)), main = "Chaco-NDWI in 2022")
+```
+
+# Aplicación:
+
+## Métodos de clasificación 
+
+### Clasificacion Supervisada
+
+Entre las aplicaciones más importantes de los datos obtenidos de imágenes satelitales es la generación de mapas de cobertura y uso de suelo, las cuales pueden ser obtenidos a partir de técnicas de clasificacion de imágenes.
+Las técnicas de clasificación de imagénes se basan en agrupar pixeles que poseen regiones del espectro similares y que pueden asociarse con diferentes clases de coberturas del suelo. En el caso particular de la clasificación supervisada,utiliza datos de entrenamiento que son variables predictoras medidas en cada unidad de muestreo, y asigna clases previas al muestreo. 
+
+Los algoritmos de clasificación supervisada varían en la forma en que identifican y describen las regiones en el espacio espectral.  Algunos pueden manejar clases definidas que se superponen entre sí, y otros generan límites firmes entre clases, entre los algoritmos más utilizados se encuentran : Random Forest, maxima verosimilitud, mínima distancia, paralelepipedos.
+
+Machine learning ofrece la posibilidad de una clasificación eficaz y eficiente de imágenes satelites,entre los algoritmos más conocidos se encuentran árboles de decisiones, random forest, redes neuronales. Algunas de sus ventajas:
+
+- Capacidad de manejar datos de alta dimensionalidad.
+
+- Mapear clases con características muy complejas.
+
+
+
