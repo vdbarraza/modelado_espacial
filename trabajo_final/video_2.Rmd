@@ -9,9 +9,9 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Introducción al análsis de imagenes satelitales
+## Introducción al análisis de imágenes satelitáles
 
-Este video exploraremos cómo importar y graficar un ráster multibanda en R. Usaremos un subset de una escena de Landsat 9 producto de surferce reflectance, perteneciente al bosque Chaqueño. Primero aprenderemos a leer un raster, y visualizarlo. Finalmente, calcularemos distintos indices de vegetación.
+Este video exploraremos cómo importar y gráficar un ráster multibanda en R. Usaremos un subset de una escena de Landsat 9 producto de surferce reflectance, perteneciente al bosque Chaqueño. Primero aprenderemos a leer un raster, y visualizarlo. Finalmente, calcularemos distintos indices de vegetación.
 
 En este notebook vamos a utilizar el producto de reflectancia de superficie de Landsat 9. El último satélite de la NASA fue lanzado el 27 de septiembre de 2021 a bordo de Atlas V y sus imágenes están disponibles desde el 10 de febrero de 2022. Como sus sucesores, cuenta con el instrumento OLI (Operational Land Imager 2) y TIRS (Thermal Infrared Sensor 2). En este caso, OLI 2 y TIRS 2 introducen la mejora en los datos provenientes de masas de agua, humedad del suelo y vegetación.
 
@@ -46,8 +46,8 @@ Ahora realicemos un gráfico de la imágen.
 ```{r}
 
 # Blue
-imagen <- raster('L9_chaco.tif')
-imagen_stack = stack("./L9_chaco.tif")
+imagen <- raster('data/L9_chaco.tif')
+imagen_stack = stack("data/L9_chaco.tif")
 summary(imagen)
 
 # create a grayscale color palette to use for the image.
@@ -78,7 +78,7 @@ Si estamos interesados en unicamente una banda, podemos importar directamente la
 ```{r}
 # Can specify which band we want to read in
 banda_2 <- 
-  raster(paste0("L9_chaco.tif"), 
+  raster(paste0("data/L9_chaco.tif"), 
            band = 2)
 
 # plot band 2
@@ -97,6 +97,8 @@ Primero veamos como es la distribución de los valores de reflectancia de superf
 hist(imagen_stack,
      maxpixels=ncell(imagen_stack))
 ```
+
+
 No obtenemos tanta información de estos gráficos en escala de grises; a menudo se combinan en un "compuesto" para crear visualizaciones más interesantes. 
 
 Para hacer una imagen de “color verdadero (o natural)”, es decir, algo que parezca una fotografía normal (vegetación en verde, agua azul, etc.), necesitamos bandas en las regiones roja, verde y azul. Para esta imagen de Landsat, se pueden usar las bandas 4 (roja), 3 (verde) y 2 (azul). El método plotRGB se puede utilizar para combinarlos en un solo compuesto. 
@@ -114,6 +116,9 @@ Observen que la imagen de arriba se ve oscura. También puede proporcionar argum
 plotRGB(imagen_stack, 
         r = 'SR_B4', g = 'SR_B3', b = 'SR_B2',axes = TRUE, stretch = "lin", main = "Landsat True Color Composite")
 ```
+
+
+
 Las tonalidades más habituales en una composición en **falso color** son:
 
 - Rojo, indica una vegetación sana y bien desarrollada.
@@ -128,7 +133,10 @@ Las tonalidades más habituales en una composición en **falso color** son:
 plotRGB(imagen_stack, 
         r = 'SR_B5', g = 'SR_B4', b = 'SR_B3', axes=TRUE, stretch="lin", main="Landsat False Color Composite")
 ```
-## Indices de vegetación
+
+
+# Indices de vegetación
+## Introducción
 
 Los índices son mediciones empíricas de las propiedades de la superficie terrestre; constituyen valores adimensionales basados en medidas de radiación y calculados a partir de la combinación de bandas espectrales. 
 
@@ -236,18 +244,108 @@ plot(ndwi, col=rev(terrain.colors(10)), main = "Chaco-NDWI in 2022")
 
 ## Métodos de clasificación 
 
-### Clasificacion Supervisada
+Vamos a clasificar la imagen en función del índice NDVI 
 
-Entre las aplicaciones más importantes de los datos obtenidos de imágenes satelitales es la generación de mapas de cobertura y uso de suelo, las cuales pueden ser obtenidos a partir de técnicas de clasificacion de imágenes.
-Las técnicas de clasificación de imagénes se basan en agrupar pixeles que poseen regiones del espectro similares y que pueden asociarse con diferentes clases de coberturas del suelo. En el caso particular de la clasificación supervisada,utiliza datos de entrenamiento que son variables predictoras medidas en cada unidad de muestreo, y asigna clases previas al muestreo. 
+Para lograrlo usaremos operaciones lógicar:
 
-Los algoritmos de clasificación supervisada varían en la forma en que identifican y describen las regiones en el espacio espectral.  Algunos pueden manejar clases definidas que se superponen entre sí, y otros generan límites firmes entre clases, entre los algoritmos más utilizados se encuentran : Random Forest, maxima verosimilitud, mínima distancia, paralelepipedos.
+```{r}
+veg <- calc(ndvi, function(x){x[x < 0.4] <- NA; return(x)})
+plot(veg, main = 'Veg cover')
+```
+Podemos obtener una estimación de la extensión espacial de diferentes elementos en la superficie, teniendo en cuenta los valores NDVI previamente obtenidos se conoce que para valores altos (en un rango de -1 a 1) nos indican coberturas verdes (Las celdas con valores de NDVI superiores a 0.4 son definitivamente vegetación").
 
-Machine learning ofrece la posibilidad de una clasificación eficaz y eficiente de imágenes satelites,entre los algoritmos más conocidos se encuentran árboles de decisiones, random forest, redes neuronales. Algunas de sus ventajas:
+La siguiente operación enmascara (Mask) todas las celdas que no cumplan con ese criterio.
 
-- Capacidad de manejar datos de alta dimensionalidad.
+```{r}
+# create classification matrix
+reclass_df <- c(
+             0, 0.4, 1,
+             0.4, 0.6, 2,
+             0.6, Inf, 3)
+reclass_df
 
-- Mapear clases con características muy complejas.
+# reshape the object into a matrix with columns and rows
+reclass_m <- matrix(reclass_df,
+                ncol = 3,
+                byrow = TRUE)
+reclass_m
+
+veg <- reclassify(ndvi,reclass_m)
+barplot(veg,
+        main = "Number of pixels in each class")
+#plot(vegc,col = rev(terrain.colors(4)), main = 'NDVI based thresholding')
+```
+```{r}
+
+# plot reclassified data
+plot(veg,
+     col = c("red", "blue", "green")
+    , axes = FALSE,
+     main = "Clasificación de la imagen de NDVI")
+
+legend("topright",
+       legend = c("<0.4", "0.4-0.6", ">0.6"),
+       fill = c("red", "blue", "green"),
+       border = FALSE,
+       bty = "n") # turn off legend border
+```
+
+```{r}
+# create color object with nice new colors!
+chm_colors <- c("palegoldenrod", "palegreen2", "palegreen4")
 
 
+# plot reclassified data
+plot(veg,
+     col = chm_colors
+    , axes = FALSE,
+     main = "Clasificación de la imagen de NDVI")
 
+legend("topright",
+       legend = c("<0.4", "0.4-0.6", ">0.6"),
+       fill =chm_colors,
+       border = FALSE,
+       bty = "n") # turn off legend border
+```
+
+
+## Clasificación no supervisada
+
+
+- Es un clasificador que usa algoritmos para agregar píxeles en grupos naturales o clúster con características espectrales similares presentes en la imagen. En este tipo de proceso, el analista no interviene en el proceso de clasificación y no existen áreas de entrenamiento. 
+
+- Aunque los resultados son poco exactos, es un paso obligado porque sirve para que el intérprete pueda asociar tipos de coberturas a los clústeres generados con información auxiliar.
+
+- Cuando se realiza éste proceso hay que comprobar una a una cada correspondencia entre la clase espectral y la clase temática. Si existe la opción de introducir un número de clases, habrá que determinar el máximo de clases en función de las clases temáticas previstas y añadir otras situaciones circunstanciales como puede ser la presencia de nubes, nieve, zonas de sombra, etc.También se pueden utilizar directamente con indices de vegetación.
+
+### K-means
+
+- **K-mean**s es un algoritmo de clasificación no supervisada (clusterización) que agrupa objetos en k grupos basándose en sus características. El agrupamiento se realiza minimizando la suma de distancias entre cada objeto y el centroide de su grupo o cluster. Se suele usar la distancia cuadrática.
+
+
+El algoritmo consta de tres pasos:
+
+- Inicialización: una vez escogido el número de grupos, k, se establecen k centroides en el espacio de los datos, por ejemplo, escogiéndolos aleatoriamente.
+
+- Asignación objetos a los centroides: cada objeto de los datos es asignado a su centroide más cercano.
+
+- Actualización centroides: se actualiza la posición del centroide de cada grupo tomando como nuevo centroide la posición del promedio de los objetos pertenecientes a dicho grupo.
+
+- El algoritmo k-means resuelve un problema de optimización, siendo la función a optimizar (minimizar) la suma de las distancias cuadráticas de cada objeto al centroide de su cluster.
+
+![K-means](https://miro.medium.com/max/1024/0*M9gP2Q4MYd-_VWPe.gif)
+
+- Gráficamente, podríamos resumir que k-means agrupara pixeles con las mismas características.
+
+Ahora apliquemos el algoritmo de k-means a la imagén de landsat
+
+```{r}
+
+
+nr <- getValues(ndvi)
+nr.km <- kmeans(na.omit(nr), centers = 10, iter.max = 500, nstart = 3, algorithm="Lloyd")
+knr <- ndvi
+knr[] <- nr.km$cluster
+plot(knr, main = 'Clasificación no supervisada un una imagen de landsat')
+
+```
