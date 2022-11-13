@@ -14,22 +14,26 @@ output:
 
 ## Modelado Espacial
 
-**Objetivo**: 
+**Objetivo**:  Identificación de áreas deforestadas a partir de análisis espacial y temporal de imágenes satelitáles
 
+Agenda:
+  
   - Fundamentos de la teledetección.
   
-  - Aplicación: identificación de áreas deforestadas
+  - Aplicación: 
   
-    - Introducción al análsis de imagenes satelitáles con R
+    - Introducción al análisis de imágenes satelitáles con R
   
-    - Introducción al análsis de series temporales satelitáles con R:
+    - Introducción al análisis de series temporales satelitáles con R:
   
   
 ## Fundamentos de la teledetección
 
-**Teledetección** es la técnica que permite obtener información a distancia de objetos sin que exista un contacto material. Para que ello sea posible es necesario que, aunque sin contacto material, exista algún tipo de interacción entre los objetos observados; situados sobre e la superficie terrestre, marina o en la atmósfera; y un sensor situado en una plataforma (satélite, avión, etc.).
+- **Teledetección** es la técnica que permite obtener información a distancia de objetos sin que exista un contacto material. 
 
-En el caso la teledetección la interacción que se produce va a ser un flujo de radiación que parte de los objetos y se dirige hacia el sensor.
+- Para que ello sea posible es necesario que, aunque sin contacto material, exista algún tipo de interacción entre los objetos observados; situados sobre e la superficie terrestre, marina o en la atmósfera; y un sensor situado en una plataforma (satélite, avión, etc.).
+
+- En el caso la teledetección la interacción que se produce va a ser un flujo de radiación que parte de los objetos y se dirige hacia el sensor.
 
 **El sensoramiento remoto o teledetección es la práctica científico-tecnológica que permite adquirir información de objetos o sistemas sin estar en contacto físico directo con los mismos**
 
@@ -118,7 +122,7 @@ Si, adicionalmente, se remueven los efectos atmosféricos, es posible convertir 
 - ESPECTRAL: Se refiere al número de bandas y a la anchura espectral de
 las bandas
 
-- ESPACIA: Es la medida del objeto mas pequeño que puede ser distinguido sobre una imagen 
+- ESPACIAL: Es la medida del objeto mas pequeño que puede ser distinguido sobre una imagen 
 
 - TEMPORAL: Se refiere a cada cuanto tiempo recoge el sensor una imagen de un área en particular 
 
@@ -170,6 +174,10 @@ $$NDVI= (NIR- RED) /(NIR +RED)$$
 - El proceso resulta ser similar al cálculo del NDVI salvo que, en esta ocasión requerimos, además, la banda correspondiente al Azul del espectro visible. La fórmula de cálculo es la siguiente:
 
 
+![EVI](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbdnYMrR96vJgg_OwqaNRSieu84tfWCf_3hg&usqp=CAU)
+
+Dónde: NIR= banda 5, R= banda 4, B= banda 2, L= 1, C1=6, C2=7.5
+
 ## Satelites ópticos: LANDSAT
 
 LANDSAT (LAND=tierra y SAT=satélite) fue el primer satélite enviado por los Estados Unidos para el monitoreo de los recursos terrestres. Inicialmente se le llamó ERTS-1 (Earth Resources Tecnology Satellite) y posteriormente los restantes recibieron el nombre de LANDSAT.
@@ -216,6 +224,7 @@ Por este motivo, en los siguientes videos vamos a realizar una introduccion al a
 - La deforestación está causada por múltiples factores, tanto naturales como humanos, y tiene consecuencias irreversibles en el medio ambiente.
 
 ## ¿Qué es la deforestación?
+
 - La **deforestación** es un fenómeno mundial. Cada año, millones de hectáreas de bosques desaparecen para convertirse en plantaciones de palma aceitera, pastos para el ganado, cultivos de soja, etc. El último medio siglo ha supuesto el mayor coste de deforestación de la historia de la humanidad, arrasando un 15 por ciento de la superficie mundial de vegetación, equivalente al territorio de España, Portugal y Francia.
 
 - Tan solo en los últimos 13 años, la deforestación ha arrasado 43 millones de hectáreas en todo el mundo, acabando con bosques y selvas de forma masiva y causando un inmenso daño a la calidad de los suelos. Los bosques todavía cubren alrededor del 30 por ciento de las regiones del mundo, pero franjas del tamaño de Panamá se pierden indefectiblemente cada año. Son las cifras del último informe Frentes de deforestación; causas y respuestas en un mundo cambiante de WWF, que analiza 24 lugares que tienen una concentración significativa de puntos críticos de deforestación y donde grandes áreas de bosque remanente están amenazadas. 
