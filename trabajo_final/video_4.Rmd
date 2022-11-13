@@ -1,0 +1,76 @@
+---
+title: "video_4"
+author: "veronica_barraza"
+date: "2022-11-07"
+output: html_document
+---
+
+## Métodos de clasificación 
+
+### Clasificacion Supervisada
+
+Entre las aplicaciones más importantes de los datos obtenidos de imágenes satelitales es la generación de mapas de cobertura y uso de suelo, las cuales pueden ser obtenidos a partir de técnicas de clasificacion de imágenes.
+Las técnicas de clasificación de imagénes se basan en agrupar pixeles que poseen regiones del espectro similares y que pueden asociarse con diferentes clases de coberturas del suelo. En el caso particular de la clasificación supervisada,utiliza datos de entrenamiento que son variables predictoras medidas en cada unidad de muestreo, y asigna clases previas al muestreo. 
+
+Los algoritmos de clasificación supervisada varían en la forma en que identifican y describen las regiones en el espacio espectral.  Algunos pueden manejar clases definidas que se superponen entre sí, y otros generan límites firmes entre clases, entre los algoritmos más utilizados se encuentran : Random Forest, maxima verosimilitud, mínima distancia, paralelepipedos.
+
+Machine learning ofrece la posibilidad de una clasificación eficaz y eficiente de imágenes satelites,entre los algoritmos más conocidos se encuentran árboles de decisiones, random forest, redes neuronales. Algunas de sus ventajas:
+
+- Capacidad de manejar datos de alta dimensionalidad.
+
+- Mapear clases con características muy complejas.
+
+En este video utilizaremos el algoritmo random forest para realizar una clasificación supervisada. Primero vamos a realizar un breve repaso de que son los ensambles y como es el modelo de random forest. Luego entrenaremos un modelo de randon forest utilizando una imagen landsat con el objetivo de detectar áreas deforestadas.
+
+## Ensanbles
+
+Los métodos tipo ensamblador están formados de un grupo de modelos predictivos que permiten alcanzar una mejor precisión y estabilidad del modelo. Estos proveen una mejora significativa a los modelos de **árboles de decisión**.
+
+¿Por qué surgen los ensambladores de árboles?
+
+Así como todos los modelos, un árbol de decisión también sufre de los problemas de sesgo y varianza. Es decir, ‘cuánto en promedio son los valores predecidos diferentes de los valores reales’ (sesgo) y ‘cuan diferentes serán las predicciones de un modelo en un mismo punto si muestras diferentes se tomaran de la misma población’ (varianza).
+
+Al construir un árbol pequeño se obtendrá un modelo con baja varianza y alto sesgo. Normalmente, al incrementar la complejidad del modelo, se verá una reducción en el error de predicción debido a un sesgo más bajo en el modelo. En un punto el modelo será muy complejo y se producirá un sobre-ajuste del modelo el cual empezará a sufrir de varianza alta.
+
+El modelo óptimo debería mantener un balance entre estos dos tipos de errores. A esto se le conoce como “trade-off” (equilibrio) entre errores de sesgo y varianza. El uso de ensambladores es una forma de aplicar este “trade-off”.
+
+![]
+
+Ensambladores comunes: Bagging, Boosting and Stacking. Random Forest es del primer tipo.
+
+**¿Qué es el proceso de bagging y cómo funciona?**
+
+Bagging es una técnica usada para reducir la varianza de las predicciones a través de la combinación de los resultados de varios clasificadores, cada uno de ellos modelados con diferentes subconjuntos tomados de la misma población.
+
+### Random Forest
+
+- Random Forest se considera como la “panacea” en todos los problemas de ciencia de datos.
+- Util para regresión y clasificación.
+- Un grupo de modelos “débiles”, se combinan en un modelo robusto.
+- Sirve como una técnica para reducción de la dimensionalidad.
+- Se generan múltiples árboles (a diferencia de CART).
+- Cada árbol da una classificación (vota por una clase). Y el resultado es la clase con mayor número de votos en todo el bosque (forest).
+- Para regresión, se toma el promedio de las salidas (predicciones) de todos los árboles.
+
+
+**¿Cómo se construye un modelo random forest?**
+
+Cada árbol se construye así:
+
+- Dado que el número de casos en el conjunto de entrenamiento es N. Una muestra de esos N casos se toma aleatoriamente pero CON REEMPLAZO. Esta muestra será el conjunto de entrenamiento para construir el árbol i.
+
+- Si existen M varibles de entrada, un número m<M se especifica tal que para cada nodo, m variables se seleccionan aleatoriamente de M. La mejor división de estos m atributos es usado para ramificar el árbol. El valor m se mantiene constante durante la generación de todo el bosque.
+
+- Cada árbol crece hasta su máxima extensión posible y NO hay proceso de poda.
+
+- Nuevas instancias se predicen a partir de la agregación de las predicciones de los x árboles (i.e., mayoría de votos para clasificación, promedio para regresión)
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
