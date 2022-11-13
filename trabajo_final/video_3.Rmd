@@ -52,7 +52,7 @@ En este contexto, el análisis de series temporales de datos satelitales resulta
 ### Serie de bosque 
 
 ```{r }
-data <- read.csv("sitio1_bosque_train.csv")
+data <- read.csv("data/sitio1_bosque_train.csv")
 #head(data)
 ```
 
@@ -203,9 +203,10 @@ A continuación se realiza un sencillo ejercicio de utilización de la función 
 
 ```{r}
 
-tdx.dcp <- stl(tdx, 4, s.window = 'periodic')
+tdx.dcp <- stl(tdx, s.window = 'periodic')
 plot(tdx.dcp)
 ```
+
 Este producto es un compuesto generado cada 16 días, a 250 m de resolución, a partir de las imágenes diarias tomadas por MODIS. Debido a la superposición de órbitas y la multiplicidad de observaciones en un mismo día, en algunas regiones pueden haber hasta 64 observaciones en un ciclo de 16 días. El algoritmo de MODIS, sin embargo, selecciona las observaciones de mayor calidad favoreciendo, principalmente, la ausencia de nubes y
 observaciones más cercanas a nadir. 
 
@@ -224,7 +225,7 @@ Del gráfico se observa que :
 
 
 ```{r}
-tdx.dcp <- stl(rollmean(tdx, 4), s.window = 'periodic')
+tdx.dcp <- stl(rollmean(tdx, 3),s.window=2, t.window =48)
 plot(tdx.dcp)
 ```
 
@@ -233,7 +234,7 @@ plot(tdx.dcp)
 La deforestación se presenta como un punto de quiebre o cambio estructural en algunas o todas las series de las bandas que corresponden al píxel deforestado. En principio, se podría asumir que es suficiente con la clase Deforestación para abordar esta tarea (desarrollo y validación de metodologías), ya que las mismas series contienen la información necesaria para detectar un quiebre en ellas (ver, por ejemplo, NRT-CCDC). 
 
 ```{r}
-data_nb <- read.csv("Sitio1_deforestacion_val.csv")
+data_nb <- read.csv("data/Sitio1_deforestacion_val.csv")
 #head(iris)
 subset_nb <- t(data_nb[1,8:437])
 subset_nb <-subset_nb %>% as.data.frame(row.names = 1:nrow(.))
@@ -246,6 +247,7 @@ breack<- as.POSIXct(c('2012-11-01'), format = "%Y-%m-%d" )
       geom_point() + geom_line(color="black")+
       geom_vline(xintercept=breack, color='red')
 ```
+
 Ahora apliquemos el suavizado en esta nueva serie:
 
 
@@ -260,15 +262,9 @@ legend("bottomleft", c("Original", "Media móvil centrada",
 grid()
 ```
 
-# Combinando ambas series temporales
-
 
 ```{r}
-espacial_nb<- data_nb[,c(2,3,8)]
-espacial_total<- merge(espacial,espacial_nb, ,all.x=TRUE, all.y=TRUE)
-ggplot() + geom_point(data = espacial_total, aes(x = lon, y = lat, color = X2000.02.18))
 
+tdx.dcp.np <- stl(tdx_nb, 2, s.window = 'periodic')
+plot(tdx.dcp.np)
 ```
-
-
-
